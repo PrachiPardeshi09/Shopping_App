@@ -14,31 +14,17 @@ class LogInScreen extends GetView<LogInScreenController>{
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Container(color: Colors.white,
           child:Column(children: [
-            TextFormField(controller: controller.logInEditingController),
+            TextField(
+              controller: controller.logInEditingController,
+              decoration: InputDecoration(labelText: 'Enter phone number'),
+              keyboardType: TextInputType.phone,
+            ),
             const SizedBox(height: 50,),
             TextFormField(controller: controller.passwordEditingController,),
             const SizedBox(height: 60,),
             ElevatedButton(
                 onPressed: () async {
-                  try {
-                    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                      email: controller.logInEditingController.text,
-                      password: controller.passwordEditingController.text,
-                    );
-                  User? user = userCredential.user;
-                  if (user != null) {
-                    controller.CheckLogInValues();
-                    // String uid = user.uid;
-                  }
-
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == 'user-not-found') {
-                      print('No user found for that email.');
-                    } else if (e.code == 'wrong-password') {
-                      print('Wrong password provided.');
-                    }
-                    // Handle other authentication errors
-                  }
+                  controller.verifyPhoneNumber();
                 },
                 child: const Text('Log In')
             )
